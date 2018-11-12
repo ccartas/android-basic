@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">myApp</string>
+    <string name="greeting_text">Hello from my first Android APP!</string>
+    <string name="userPH">Username</string>
+    <string name="passPH">Password</string>
+    <string name="registerBtn">Register</string>
+    <string name="loginBtn">Login</string>
+    <string name="namePH">Name</string>
+    <string name="surnamePH">Surname</string>
+    <string name="confirmPassPH">Confirm Password</string>
+</resources>
