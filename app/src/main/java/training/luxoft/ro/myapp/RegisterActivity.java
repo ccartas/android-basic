@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import training.luxoft.ro.myapp.models.User;
+
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -30,15 +34,33 @@ public class RegisterActivity extends AppCompatActivity {
         this.mConfirmPassET = findViewById(R.id.registerConfirmPassET);
 
         this.mConfirmRegisterBtn = findViewById(R.id.confirmRegisterBtn);
-
         this.mConfirmRegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent();
-                i.putExtra("name", mNameET.getText().toString());
-                setResult(Activity.RESULT_OK, i);
-                finish();
+                if(allFieldsAreVlaid()){
+                    Intent i = new Intent();
+                    User u = new User(mNameET.getText().toString(), mSurnameET.getText().toString(),
+                                        mUsernameET.getText().toString(), mPasswordET.getText().toString());
+                    i.putExtra("user-object", u);
+                    setResult(Activity.RESULT_OK, i);
+                    finish();
+                } else {
+                    Toast.makeText(RegisterActivity.this,
+                            "Eroare! Atentie la completarea campurilor!",
+                            Toast.LENGTH_LONG ).show();
+                }
             }
         });
+    }
+
+    private boolean allFieldsAreVlaid(){
+        if(this.mNameET.getText().toString().trim().length() >= 3 &&
+                this.mSurnameET.getText().toString().trim().length() >=3 &&
+                this.mUsernameET.getText().toString().trim().length() >=6 &&
+                this.mPasswordET.getText().toString().length() >=6 &&
+                this.mPasswordET.getText().toString().equals(this.mConfirmPassET.getText().toString())){
+            return true;
+        }
+        return false;
     }
 }
