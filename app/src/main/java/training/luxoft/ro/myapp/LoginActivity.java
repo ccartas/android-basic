@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.media.RingtoneManager;
 import android.support.v4.app.NotificationCompat;
@@ -20,6 +21,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import training.luxoft.ro.myapp.helpers.SharedPreferencesHelper;
+import training.luxoft.ro.myapp.models.ToDoItem;
 import training.luxoft.ro.myapp.models.User;
 
 
@@ -30,9 +33,12 @@ public class LoginActivity extends AppCompatActivity {
     Button mLoginBtn;
     Button mRegisterBtn;
 
+    SharedPreferencesHelper preferencesHelper;
+
     private static final int REGISTER_REQUEST_CODE = 1;
 
     public static List<User> users = new ArrayList<>();
+    public static List<ToDoItem> items = new ArrayList<>();
 
 
     @Override
@@ -45,6 +51,13 @@ public class LoginActivity extends AppCompatActivity {
         this.mLoginBtn = findViewById(R.id.loginBtn);
         this.mRegisterBtn = findViewById(R.id.registerBtn);
 
+        this.preferencesHelper = new SharedPreferencesHelper(LoginActivity.this);
+
+        if(this.preferencesHelper.getValue("username", null) != null){
+            Intent i = new Intent(LoginActivity.this, MenuActivity.class);
+            startActivity(i);
+            finish();
+        }
 
         this.mRegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +101,8 @@ public class LoginActivity extends AppCompatActivity {
             for(User u: users){
                 if(u.getUsername().equals(this.mUsernameET.getText().toString()) &&
                         u.getPassword().equals(this.mPasswordET.getText().toString())){
+                    this.preferencesHelper.addValue("username", u.getUsername());
+                    this.preferencesHelper.addValue("password", u.getPassword());
                     return true;
                 }
             }

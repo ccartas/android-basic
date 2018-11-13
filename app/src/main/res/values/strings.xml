@@ -8,4 +8,16 @@
     <string name="namePH">Name</string>
     <string name="surnamePH">Surname</string>
     <string name="confirmPassPH">Confirm Password</string>
+    <string name="newItemBtn">New Item</string>
+    <string name="listItemsBtn">List Items</string>
+    <string name="profileBtn">Profile</string>
+    <string name="logoutBtn">Logout</string>
+    <string name="priorityLow">Low</string>
+    <string name="priorityMedium">Medium</string>
+    <string name="priorityHigh">High</string>
+    <string name="confirmNewItemBtn">Add New Item</string>
+    <string name="logoutDialogTitle">You are about to logout</string>
+    <string name="logoutDialogMessage">Are you sure that you want to logout?</string>
+    <string name="logoutDialogPText">Yes</string>
+    <string name="logoutDialogNText">No</string>
 </resources>

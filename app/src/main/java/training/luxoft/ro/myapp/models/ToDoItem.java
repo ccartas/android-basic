@@ -1,17 +1,19 @@
 package training.luxoft.ro.myapp.models;
 
-public class ToDoItem {
+import java.io.Serializable;
+
+public class ToDoItem implements Serializable {
 
     private String taskName;
     private String priority;
     private int duration;
     private boolean isDone;
 
-    ToDoItem(){
+    public ToDoItem(){
 
     }
 
-    ToDoItem(String name, String priority, int duration, boolean isDone){
+    public ToDoItem(String name, String priority, int duration, boolean isDone){
         this.taskName = name;
         this.priority = priority;
         this.duration = duration;
