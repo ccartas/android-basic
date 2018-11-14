@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import training.luxoft.ro.myapp.helpers.DatabaseHelper;
 import training.luxoft.ro.myapp.models.User;
 
 
@@ -21,6 +22,7 @@ public class RegisterActivity extends AppCompatActivity {
     EditText mConfirmPassET;
 
     Button mConfirmRegisterBtn;
+    DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +36,13 @@ public class RegisterActivity extends AppCompatActivity {
         this.mConfirmPassET = findViewById(R.id.registerConfirmPassET);
 
         this.mConfirmRegisterBtn = findViewById(R.id.confirmRegisterBtn);
+
+        this.databaseHelper = new DatabaseHelper(RegisterActivity.this);
+
         this.mConfirmRegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(allFieldsAreVlaid()){
+                if(allFieldsAreVlaid() && !databaseHelper.checkIfUserExists(mUsernameET.getText().toString())){
                     Intent i = new Intent();
                     User u = new User(mNameET.getText().toString(), mSurnameET.getText().toString(),
                                         mUsernameET.getText().toString(), mPasswordET.getText().toString());
@@ -46,7 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
                     finish();
                 } else {
                     Toast.makeText(RegisterActivity.this,
-                            "Eroare! Atentie la completarea campurilor!",
+                            "Eroare! Atentie la completarea campurilor sau utilizatorul exista deja!",
                             Toast.LENGTH_LONG ).show();
                 }
             }

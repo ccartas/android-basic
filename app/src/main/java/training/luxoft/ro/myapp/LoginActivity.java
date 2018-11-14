@@ -1,16 +1,7 @@
 package training.luxoft.ro.myapp;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.media.RingtoneManager;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +12,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import training.luxoft.ro.myapp.helpers.DatabaseHelper;
+import training.luxoft.ro.myapp.helpers.NotificationsHelper;
 import training.luxoft.ro.myapp.helpers.SharedPreferencesHelper;
 import training.luxoft.ro.myapp.models.ToDoItem;
 import training.luxoft.ro.myapp.models.User;
@@ -34,6 +27,9 @@ public class LoginActivity extends AppCompatActivity {
     Button mRegisterBtn;
 
     SharedPreferencesHelper preferencesHelper;
+    NotificationsHelper notificationsHelper;
+    DatabaseHelper databaseHelper;
+
 
     private static final int REGISTER_REQUEST_CODE = 1;
 
@@ -52,6 +48,8 @@ public class LoginActivity extends AppCompatActivity {
         this.mRegisterBtn = findViewById(R.id.registerBtn);
 
         this.preferencesHelper = new SharedPreferencesHelper(LoginActivity.this);
+        this.notificationsHelper = new NotificationsHelper(LoginActivity.this);
+        this.databaseHelper = new DatabaseHelper(LoginActivity.this); //getApplicationContext()
 
         if(this.preferencesHelper.getValue("username", null) != null){
             Intent i = new Intent(LoginActivity.this, MenuActivity.class);
@@ -90,9 +88,17 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REGISTER_REQUEST_CODE && resultCode == Activity.RESULT_OK){
-            users.add((User) data.getExtras().get("user-object"));
-        }
+            User u = (User) data.getExtras().get("user-object");
+            //users.add(u);
+            if(databaseHelper.registerUser(u) != -1){
+                this.notificationsHelper.sendNotification("Congratulations!",
+                        "Welcome to toDoApp " + u.getName());
+            } else {
+                Toast.makeText(LoginActivity.this, "An error occured!",
+                            Toast.LENGTH_LONG).show();
+            }
 
+        }
     }
 
     private boolean validateLogin(){

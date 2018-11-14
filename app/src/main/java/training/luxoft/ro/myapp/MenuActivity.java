@@ -20,6 +20,7 @@ public class MenuActivity extends AppCompatActivity {
     Button mProfileBtn;
     Button mLogoutBtn;
 
+
     public static final int NEW_ITEM_REQUEST_CODE = 10;
 
     SharedPreferencesHelper preferencesHelper;
@@ -77,7 +78,7 @@ public class MenuActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == NEW_ITEM_REQUEST_CODE && resultCode == Activity.RESULT_OK){
-            LoginActivity.items.add((ToDoItem) data.getExtras().get("item"));
+           LoginActivity.items.add((ToDoItem) data.getExtras().get("item"));
             Toast.makeText(MenuActivity.this, "To Do Added Successfully!", Toast.LENGTH_SHORT).show();
         }
     }
