@@ -153,6 +153,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return items;
     }
 
+    public long deleteItem(int itemID){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selection = Entities.ToDoEntity.TODO_ID + "= ?";
+        String[] selectionArgs = {String.valueOf(itemID)};
+
+        long result = db.delete(Entities.ToDoEntity.TODO_TABLE_NAME,
+                selection, selectionArgs);
+        db.close();
+        return result;
+    }
+
+    public long updateItem(int itemID){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(Entities.ToDoEntity.TODO_STATUS, 1);
+
+        String selection = Entities.ToDoEntity.TODO_ID + "= ?";
+        String[] selectionArgs = {String.valueOf(itemID)};
+
+        long result = db.update(Entities.ToDoEntity.TODO_TABLE_NAME,
+                            values,
+                            selection,
+                    selectionArgs);
+        db.close();
+        return result;
+    }
+
+
+
 
 
 

@@ -63,6 +63,14 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
+        this.mProfileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MenuActivity.this, ProfileActivity.class);
+                startActivity(i);
+            }
+        });
+
         this.mLogoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
