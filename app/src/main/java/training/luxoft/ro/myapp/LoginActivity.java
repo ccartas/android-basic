@@ -33,7 +33,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final int REGISTER_REQUEST_CODE = 1;
 
-    public static List<User> users = new ArrayList<>();
     public static List<ToDoItem> items = new ArrayList<>();
 
 
@@ -104,15 +103,16 @@ public class LoginActivity extends AppCompatActivity {
     private boolean validateLogin(){
         if(this.mUsernameET.getText().toString().trim().length() >= 6 &&
                 this.mPasswordET.getText().toString().length() >= 6){
-            for(User u: users){
-                if(u.getUsername().equals(this.mUsernameET.getText().toString()) &&
-                        u.getPassword().equals(this.mPasswordET.getText().toString())){
-                    this.preferencesHelper.addValue("username", u.getUsername());
-                    this.preferencesHelper.addValue("password", u.getPassword());
+                User user = this.databaseHelper.loginUser(this.mUsernameET.getText().toString(),
+                                    this.mPasswordET.getText().toString());
+                if(user != null){
+                    this.preferencesHelper.addValue("name", user.getName());
+                    this.preferencesHelper.addValue("surname", user.getSurname());
+                    this.preferencesHelper.addValue("username", user.getUsername());
+                    this.preferencesHelper.addValue("password", user.getPassword());
                     return true;
                 }
             }
-        }
         return false;
     }
 

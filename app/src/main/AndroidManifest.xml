@@ -19,6 +19,7 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MenuActivity" />
         <activity android:name=".AddItemActivity" />
+        <activity android:name=".ListItemActivity"></activity>
     </application>
 
 </manifest>

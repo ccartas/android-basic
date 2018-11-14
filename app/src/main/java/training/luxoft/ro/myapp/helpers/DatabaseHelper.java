@@ -6,6 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import training.luxoft.ro.myapp.models.ToDoItem;
 import training.luxoft.ro.myapp.models.User;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -76,4 +80,80 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return false;
     }
+
+    public User loginUser(String username, String password){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selection = Entities.UserEntity.USER_USERNAME + "= ? AND " +
+                        Entities.UserEntity.USER_PASSWORD + "= ?";
+        String[] selectionArgs = {username, password};
+        Cursor cursor = db.query(Entities.UserEntity.USER_TABLE_NAME,
+                null,
+                selection, selectionArgs, null, null, null);
+        User user = null;
+        if(cursor.getCount() == 1){
+            cursor.moveToFirst();
+            user = new User();
+            user.setName(cursor.getString(1));
+            user.setSurname(cursor.getString(2));
+            user.setUsername(cursor.getString(3));
+            user.setPassword(cursor.getString(4));
+        }
+        cursor.close();
+        db.close();
+        return user;
+    }
+
+    public long addToDo(ToDoItem item){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(Entities.ToDoEntity.TODO_TASK_NAME, item.getTaskName());
+        values.put(Entities.ToDoEntity.TODO_PRIORITY, item.getPriority());
+        values.put(Entities.ToDoEntity.TODO_DURATION, item.getDuration());
+        long result = db.insert(Entities.ToDoEntity.TODO_TABLE_NAME, null, values);
+
+        db.close();
+        return result;
+    }
+
+    public List<ToDoItem> getAllToDoItems(){
+        List<ToDoItem> items = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(Entities.ToDoEntity.TODO_TABLE_NAME,
+                            null, null, null, null, null, null);
+        while(cursor.moveToNext()){
+            ToDoItem toDo = new ToDoItem();
+            toDo.setTaskName(cursor.getString(1));
+            toDo.setPriority(cursor.getString(2));
+            toDo.setDuration(cursor.getInt(3));
+            toDo.setIsDone(cursor.getInt(4) > 0);
+            items.add(toDo);
+        }
+        cursor.close();
+        db.close();
+        return items;
+    }
+
+    public List<ToDoItem> getUndoneToDoItems(){
+        List<ToDoItem> items = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selection = Entities.ToDoEntity.TODO_STATUS + "= ?";
+        String[] selectionArgs = {"0"};
+        Cursor cursor = db.query(Entities.ToDoEntity.TODO_TABLE_NAME,
+                null, selection, selectionArgs, null, null, null);
+        while(cursor.moveToNext()){
+            ToDoItem toDo = new ToDoItem();
+            toDo.setTaskName(cursor.getString(1));
+            toDo.setPriority(cursor.getString(2));
+            toDo.setDuration(cursor.getInt(3));
+            toDo.setIsDone(false);
+            items.add(toDo);
+        }
+        cursor.close();
+        db.close();
+        return items;
+    }
+
+
+
+
 }
